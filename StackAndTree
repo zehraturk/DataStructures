@@ -1,0 +1,210 @@
+
+#include <stdio.h>
+#include<stdlib.h>
+#include<locale.h> 
+#define MAXSIZE 10
+
+int pop();
+
+struct stack
+{
+	int arr[MAXSIZE];
+	int top;
+};
+
+struct stack s;
+
+
+
+struct node {
+	int info;
+	struct node *left;
+	struct node *right;
+
+};
+typedef struct node *NODEPTR;
+
+NODEPTR getnode(void)
+{
+	NODEPTR p;
+	p = (NODEPTR)malloc(sizeof(struct node));
+	return(p);
+}
+
+NODEPTR maketree(int x)
+{
+	NODEPTR p;
+
+	p = getnode();
+	p->info = x;
+	p->left = NULL;
+	p->right = NULL;
+	return(p);
+
+
+}
+
+
+
+NODEPTR ptree;
+NODEPTR p, q;
+void agacaAktar() {
+	int number;
+	number = pop();
+	ptree = maketree(number);
+	while (number != NULL) {
+		number = pop();
+		if (number == NULL) {
+			return;
+		}
+		p = q = ptree;
+		while (number != p->info && q != NULL)
+		{
+			p = q;
+			if (number < p->info)
+				q = p->left;
+			else
+				q = p->right;
+		}
+		if (number == p->info)
+			printf("%d ", number);
+		else if (number < p->info)
+		{ //setleft
+			if (p == NULL)
+				printf("void insertion");
+			else if (p->left != NULL)
+				printf("invalid insertion");
+			else
+				p->left = maketree(number);
+
+		}
+		else
+		{ //setrigt
+			if (p == NULL)
+				printf("void insertion");
+			else if (p->right != NULL)
+				printf( "invalid insertion");
+			else
+				p->right = maketree(number);
+		}
+	}
+}
+
+
+void intrav(NODEPTR tree)
+{
+
+	if (tree != NULL) {
+		intrav(tree->left);
+		printf("%d ", tree->info);
+		printf("	");
+		intrav(tree->right);
+
+	}
+
+}
+
+
+void push(int);
+int  pop(void);
+void display(void);
+
+
+
+int main()
+{
+	setlocale(LC_ALL, "Turkish");
+	int secim;
+	int tmp;
+	s.top = -1;
+
+	while (1)
+	{
+		printf("\n_________________________________________\n\n");
+		printf("      1-->Yığıta eleman ekle             \n");
+		printf("      2-->Yığıttan eleman sil         \n");
+		printf("      3-->Yığıttaki elemanları görüntüle           \n");
+		printf("      4-->Yığıttaki elemanları ağaca aktar ve görüntüle  \n");
+		printf("_________________________________________\n");
+
+		printf("Seçiminizi girin: ");
+		scanf_s("%d", &secim);
+		printf("\n");
+		switch (secim) {
+		case 1:
+			tmp = 0;
+			printf("Eklenecek eleman:");
+			scanf_s("%d", &tmp);
+			push(tmp);
+			break;
+		case 2:
+			pop();
+			break;
+		case 3:
+			display();
+			break;
+		case 4:
+			
+			agacaAktar();
+			printf("-----LDR-----\n");
+			intrav(ptree);
+			
+
+
+		}
+	}
+	return 0;
+}
+
+
+void push(int x)
+{
+	if (s.top == (MAXSIZE - 1))
+	{
+		printf( "Yığıt  dolu\n");
+		return;
+	}
+	else
+	{
+	    s.arr[++(s.top)] = x;
+		printf("%d eklendi.\n", x);
+	}
+	return;
+}
+
+
+int pop()
+{
+	int tmp;
+	if (s.top == -1)
+	{
+		printf( "Yığıt boş\n");
+		return NULL;
+	}
+	else
+	{
+		tmp = s.arr[s.top];
+		printf("%d yığıttan silindi.\n", tmp);
+		s.top = s.top - 1;
+
+	}
+	return(tmp);
+}
+
+
+void display()
+{
+	int i;
+	if (s.top == -1)
+	{
+		printf("Yığıt boş...\n");
+		return;
+	}
+	else
+	{
+		printf("Yığıttaki elemanlar:\n");
+		for (i = s.top; i >= 0; i--)
+			printf("%d \n", s.arr[i]);
+	}
+	printf("\n");
+}
