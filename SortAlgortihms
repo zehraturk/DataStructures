@@ -1,0 +1,75 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<conio.h>
+int sayac = 0;
+void yerdegis(int D[],int a, int b) {
+	int temp;
+	temp = D[a];
+	D[a] = D[b];
+	D[b] = temp;
+}
+//selection sort çalışma zamanı:n(n-1)/2,karşılaştırma sayısı:n^2/2
+void selectionSort(int D[],int n) {
+	int i;
+	for (i = 0; i < n; i++) {
+		int min = i;
+		int j;
+		for (j = i + 1; j < n; j++) {
+			if (D[j] < D[min]) {
+				min = j;
+				yerdegis(D,min, i);
+			}
+		}
+	}
+}
+//bubble sort çalışma zamanı:n^2,karşılaştırm sayısı:n^2/2
+void bubbleSort(int D[], int n) {
+	int i;
+	for (i = n; i > 1; i--) {
+		int j;
+		for (j = 0; j < i - 1; j++) {
+			if (D[j] > D[j + 1]) {
+				yerdegis(D, j, j + 1);
+			}
+		}
+	}
+}
+//insertion sort çalışma zamanı:n^2, karşılaştırsma sayısı:n(n-1)/2
+void insertionSort(int D[], int n) {
+	int i;
+	for (i = 1; i < n; i++) {
+		int j;
+		for (j = i; j >= 0; j--) {
+			if (D[j] < D[j - 1]) {
+				sayac++;
+				yerdegis(D, j, j - 1);
+				
+			}
+		}
+	}
+}
+int main() {
+	int n = 10;
+	int sayi_dizisi[10];
+	
+    int i;
+	for (i = 0; i < 10; i++) {
+		sayi_dizisi[i] = rand()%20;
+	}
+	int j;
+	for (j = 0; j < 10; j++) {
+		printf("%d.eleman:%d \n",j,sayi_dizisi[j]);
+		
+	}
+	insertionSort(sayi_dizisi, 10);
+	
+	printf("sayac:%d",sayac);
+	printf("\nsiralamadan sonra dizi:\n");
+	for (j = 0; j < 10; j++) {
+		printf("%d.eleman:%d \n",j,sayi_dizisi[j]);
+		
+	}
+	
+
+	return 0;
+}
