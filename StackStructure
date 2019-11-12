@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *top = NULL;
+void display();
+void push(int);
+void pop();
+int main() {
+	int selection,n;
+	while(1){
+	
+	printf ("\n*** *** ***\n");
+        printf ("      1    -->    PUSH               \n");
+        printf ("      2    -->    POP               \n");
+        printf ("      3    -->    DISPLAY               \n");
+        printf ("      4    -->    EXIT           \n");
+        printf ("\n*** *** ***\n");
+        printf ("Seçiminizi girin: ");
+        scanf    ("%d", &selection);
+        switch (selection){
+            case 1:
+                printf ("Eklenecek eleman:");
+                scanf("%d", &n);
+                push(n);
+                break;
+            case 2:
+                pop();
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                return 0;
+        }
+    }
+            return 0;
+
+    }
+	
+	
+
+
+void push(int item){
+	struct node *nptr=malloc(sizeof(struct node));
+	
+	nptr->data=item;
+	
+	nptr->next=top;
+	
+	top=nptr;
+	
+}
+
+void display(){
+	struct node *temp;
+	temp=top;
+	
+	while(temp!=NULL){
+		printf("\n %d", temp->data);
+		temp=temp->next;
+	}
+	printf("\n");
+}
+
+void pop(){
+	if(top==NULL){
+		printf("stack bos!");
+	}
+	
+	else{
+		struct node *temp;
+		temp=top;
+		top=top->next;
+		printf("\n %d silindi", temp->data);
+		
+		free(temp);
+	}
+}
