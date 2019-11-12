@@ -1,0 +1,133 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node {
+	int info;
+	struct node *left;
+	struct node *right;
+};
+struct node * tree = NULL;
+int agacDizi[100];
+int yaprakSayisi;
+
+struct node * createnode(int x)
+{
+	struct node * p = (struct node *)malloc(sizeof(struct node));
+	p->info = x;
+	p->left = NULL;
+	p->right = NULL;
+	printf("\n%d  agaca eklendi...\n", x);
+	return(p);
+}
+void setleft(struct node *p, int x);
+void setright(struct node *p, int x);
+void yaprakBul(struct node *root);
+unsigned int yaprakSayisiHesapla(struct node* node);
+int main()
+{
+	struct node * p, *q;
+	int secim, x;
+	while (1)
+	{
+		printf("\n_________________________\n\n");
+		printf(" (1)Eleman ekle \n");
+		printf(" (2)Yaprak dugumleri goruntule \n");
+		printf(" (3)EXIT\n");
+		printf("\n_________________________\n\n");
+		printf("Seciminizi girin: ");
+		scanf_s("%d", &secim);
+		printf("\n");
+		switch (secim) {
+		case 1:
+			printf("Agaca eklemek istediginiz sayiyi giriniz:");
+			scanf_s("%d", &x);
+			if (tree == NULL) //agacta eleman yok
+			{
+				printf("Agac olusturuldu... \n");
+				tree = createnode(x);
+			}
+			else //agacta onceden eleman vardi
+			{
+				p = q = tree;
+				while ((x != p->info) && q != NULL) {
+					p = q;
+					if (x < p->info)
+						q = p->left;
+					else
+						q = p->right;
+				}
+				if (x == (p->info)) //daha once ayni eleman eklenmis
+					printf("Bu sayi daha once eklendi... \n");
+				else if (x < (p->info)) //sola ekleme
+					setleft(p, x);
+				else //saga ekleme
+					setright(p, x);
+			}
+			break;
+		case 2:
+			yaprakSayisi = 0;
+			if (tree == NULL) {
+				printf("Agacta eleman yok...");
+				break;
+			}
+
+
+			yaprakBul(tree);
+			printf("Yaprak dugum sayisi: %d \n\n", yaprakSayisiHesapla(tree));
+
+			printf("Yaprak dugumler: \n");
+			int i;
+			for (i = 0; i <yaprakSayisi; i++) {
+
+				printf("%d  ", agacDizi[i]);
+			}
+			break;
+		case 3:
+			return;
+		}
+	}
+	return 0;
+}
+void setleft(struct node * p, int x)
+{
+	if (p == NULL)
+		printf(" void insertion...\n");
+	else if (p->left != NULL) //solda node zaten var
+		printf(" invalid insertion... \n");
+	else
+		p->left = createnode(x);
+}
+void setright(struct node * p, int x)
+{
+	if (p == NULL)
+		printf(" void insertion... \n");
+	else if (p->right != NULL) //sagda node zaten var
+		printf(" invalid insertion... \n");
+	else
+		p->right = createnode(x);
+}
+
+void yaprakBul(struct node *node)
+{
+	if (!node)
+		return;
+	if (!node->left && !node->right)
+	{
+		agacDizi[yaprakSayisi] = node->info;
+		yaprakSayisi++;
+		return;
+	}
+	if (node->left)
+		yaprakBul(node->left);
+	if (node->right)
+		yaprakBul(node->right);
+}
+unsigned int yaprakSayisiHesapla(struct node * node)
+{
+	if (node == NULL)
+		return 0;
+	if (node->left == NULL && node->right == NULL)
+		return 1;
+	else
+		return yaprakSayisiHesapla(node->left) +
+		yaprakSayisiHesapla(node->right);
+}
